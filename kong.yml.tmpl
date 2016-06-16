@@ -1,0 +1,24 @@
+######
+## Kong configuration file. Just stating the settings that aren't default
+##
+## Using the template format, leaving it to the start script of the container to fill out the variables only known at runtime
+##
+
+######
+## Specify which database to use. Only "cassandra" and "postgres" are currently available.
+ database: postgres
+
+######
+## PostgreSQL configuration
+ postgres:
+   host: ${POSTGRES_ENDPOINT}
+   port: 5432
+
+  ######
+  ## Name of the database used by Kong. Will be created if it does not exist.
+   database: kong
+
+  #####
+  ## User authentication settings
+   user: api_gateway
+   password: <passord>
