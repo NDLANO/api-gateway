@@ -9,5 +9,3 @@ Kong gateway for API's of NDLA.no
 
 You need to have a docker daemon running locally.
 
-## Deploy Docker Image to Amazon (via DockerHub)
-    See ../deploy/ReadMe.md
