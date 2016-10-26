@@ -9,11 +9,16 @@ mv /etc/kong/kong.yml /etc/kong/kong.yml.bak
 ###
 sed '/^nginx:/,$!d' /etc/kong/kong.yml.bak > /etc/kong/kong.yml
 
+secretsfile="/tmp/secrets"
+aws s3 --region eu-central-1 cp s3://$NDLA_ENVIRONMENT.secrets.ndla/api_gateway.secrets $secretsfile
+
 # This is manipulating a yaml file. Beware of the blanks!!
 echo -e '\n\ndatabase: "postgres"' >> /etc/kong/kong.yml
 echo -e '\npostgres:'  >> /etc/kong/kong.yml
-echo -e '  host: "'$DATABASE_HOST'"'  >> /etc/kong/kong.yml
-echo -e '  port: 5432'  >> /etc/kong/kong.yml
-echo -e '  database: "'$DATABASE_NAME'"'  >> /etc/kong/kong.yml
-echo -e '  user: "'$DATABASE_USER'"'  >> /etc/kong/kong.yml
-echo -e '  password: "'$DATABASE_USER_PASSWORD'"' >> /etc/kong/kong.yml
+echo -e "  host: \"$(cat $secretsfile | jq -r .host)\""  >> /etc/kong/kong.yml
+echo -e "  port: $(cat $secretsfile | jq -r .port)"  >> /etc/kong/kong.yml
+echo -e "  database: \"$(cat $secretsfile | jq -r .database)\""  >> /etc/kong/kong.yml
+echo -e "  user: \"$(cat $secretsfile | jq -r .user)\""  >> /etc/kong/kong.yml
+echo -e "  password: \"$(cat $secretsfile | jq -r .password)\"" >> /etc/kong/kong.yml
+
+rm $secretsfile
