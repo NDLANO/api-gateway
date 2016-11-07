@@ -9,6 +9,8 @@ mv /etc/kong/kong.yml /etc/kong/kong.yml.bak
 ###
 sed '/^nginx:/,$!d' /etc/kong/kong.yml.bak > /etc/kong/kong.yml
 
+echo -e '\n\n"proxy_listen": "0.0.0.0:80"' >> /etc/kong/kong.yml
+
 # This is manipulating a yaml file. Beware of the blanks!!
 echo -e '\n\ndatabase: "postgres"' >> /etc/kong/kong.yml
 echo -e '\npostgres:'  >> /etc/kong/kong.yml
