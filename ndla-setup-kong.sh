@@ -17,10 +17,10 @@ echo -e '\n\n"proxy_listen": "0.0.0.0:80"' >> /etc/kong/kong.yml
 # This is manipulating a yaml file. Beware of the blanks!!
 echo -e '\n\ndatabase: "postgres"' >> /etc/kong/kong.yml
 echo -e '\npostgres:'  >> /etc/kong/kong.yml
-echo -e "  host: \"$(cat $secretsfile | jq -r .host)\""  >> /etc/kong/kong.yml
-echo -e "  port: $(cat $secretsfile | jq -r .port)"  >> /etc/kong/kong.yml
-echo -e "  database: \"$(cat $secretsfile | jq -r .database)\""  >> /etc/kong/kong.yml
-echo -e "  user: \"$(cat $secretsfile | jq -r .user)\""  >> /etc/kong/kong.yml
-echo -e "  password: \"$(cat $secretsfile | jq -r .password)\"" >> /etc/kong/kong.yml
+echo -e "  host: \"$(cat $secretsfile | jq -r .META_SERVER)\""  >> /etc/kong/kong.yml
+echo -e "  port: $(cat $secretsfile | jq -r .META_PORT)"  >> /etc/kong/kong.yml
+echo -e "  database: \"$(cat $secretsfile | jq -r .META_RESOURCE)\""  >> /etc/kong/kong.yml
+echo -e "  user: \"$(cat $secretsfile | jq -r .META_USER_NAME)\""  >> /etc/kong/kong.yml
+echo -e "  password: \"$(cat $secretsfile | jq -r .META_PASSWORD)\"" >> /etc/kong/kong.yml
 
 rm $secretsfile
