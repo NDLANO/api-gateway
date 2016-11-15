@@ -10,7 +10,7 @@ mv /etc/kong/kong.yml /etc/kong/kong.yml.bak
 sed '/^nginx:/,$!d' /etc/kong/kong.yml.bak > /etc/kong/kong.yml
 
 secretsfile="/tmp/secrets"
-aws s3 --region eu-central-1 cp s3://$NDLA_ENVIRONMENT.secrets.ndla/api_gateway.secrets $secretsfile
+aws s3 --region eu-central-1 cp s3://$NDLA_ENVIRONMENT.secrets.ndla/api-gateway.secrets $secretsfile
 
 echo -e '\n\n"proxy_listen": "0.0.0.0:80"' >> /etc/kong/kong.yml
 
