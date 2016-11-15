@@ -12,6 +12,8 @@ sed '/^nginx:/,$!d' /etc/kong/kong.yml.bak > /etc/kong/kong.yml
 secretsfile="/tmp/secrets"
 aws s3 --region eu-central-1 cp s3://$NDLA_ENVIRONMENT.secrets.ndla/api_gateway.secrets $secretsfile
 
+echo -e '\n\n"proxy_listen": "0.0.0.0:80"' >> /etc/kong/kong.yml
+
 # This is manipulating a yaml file. Beware of the blanks!!
 echo -e '\n\ndatabase: "postgres"' >> /etc/kong/kong.yml
 echo -e '\npostgres:'  >> /etc/kong/kong.yml
