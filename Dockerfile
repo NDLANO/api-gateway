@@ -1,6 +1,9 @@
-FROM mashape/kong:0.8.3
+FROM kong:0.9.5
 
-COPY ndla-setup-kong.sh /ndla-setup-kong.sh
-RUN chmod +x /ndla-setup-kong.sh
+COPY ndla-run-kong.sh /ndla-run-kong.sh
+RUN chmod +x /ndla-run-kong.sh
 
-CMD ./ndla-setup-kong.sh && kong start
+RUN yum --assumeyes install python-pip jq && \
+ pip install awscli
+
+CMD ./ndla-run-kong.sh
