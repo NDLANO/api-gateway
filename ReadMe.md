@@ -9,3 +9,4 @@ Kong gateway for API's of NDLA.no
 
 You need to have a docker daemon running locally.
 
+
