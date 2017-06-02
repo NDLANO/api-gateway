@@ -1,4 +1,4 @@
-FROM kong:0.10.2
+FROM kong:0.10.3
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
 RUN chmod +x /ndla-run-kong.sh
