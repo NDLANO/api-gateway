@@ -3,6 +3,7 @@ worker_processes ${{NGINX_WORKER_PROCESSES}}; # can be set by kong.conf
 daemon ${{NGINX_DAEMON}};                     # can be set by kong.conf
 
 error_log logs/error.log ${{LOG_LEVEL}}; # can be set by kong.conf
+env NDLA_ENVIRONMENT;
 
 events {}
 
@@ -30,7 +31,8 @@ http {
         set $api_gateway       '127.0.0.1:8000';
 
         location ~* ^/audio/files/(.*) {
-          set $s3_bucket        's3.eu-central-1.amazonaws.com/${{NDLA_ENVIRONMENT}}.audio.ndla';
+          set_by_lua $ndla_env  'return os.getenv("NDLA_ENVIRONMENT")';
+          set $s3_bucket        's3.eu-central-1.amazonaws.com/$ndla_env.audio.ndla';
           set $url_image        '$1';
 
           proxy_set_header       Referer    'ndla_proxy';
@@ -55,7 +57,13 @@ http {
         }
 
         location ~* ^/image-api/raw/(.*) {
-          set $s3_bucket        's3.eu-central-1.amazonaws.com/${{NDLA_ENVIRONMENT}}.images.ndla';
+          proxy_set_header  Host $http_host;
+          proxy_set_header  X-Real-IP $remote_addr;
+          proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header  Forwarded "for=$remote_addr;proto=$http_x_forwarded_proto";
+          proxy_set_header  X-Forwarded-Prefix /$1;
+          set_by_lua $ndla_env  'return os.getenv("NDLA_ENVIRONMENT")';
+          set $s3_bucket        's3.eu-central-1.amazonaws.com/$ndla_env.images.ndla';
           set $url_image        'http://$api_gateway/image-api/raw/$1$is_args$args';
           set $image_name 	    '$1';
 
@@ -76,7 +84,8 @@ http {
         }
 
         location ~* ^/files/(.*) {
-          set $s3_bucket        's3.eu-central-1.amazonaws.com/${{NDLA_ENVIRONMENT}}.article-attachments.ndla';
+          set_by_lua $ndla_env  'return os.getenv("NDLA_ENVIRONMENT")';
+          set $s3_bucket        's3.eu-central-1.amazonaws.com/$ndla_env.article-attachments.ndla';
           set $url_file         '$1';
 
           proxy_set_header       Referer    'ndla_proxy';
