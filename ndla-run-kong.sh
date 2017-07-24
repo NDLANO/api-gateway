@@ -35,5 +35,5 @@ fi
 
 setup_logging
 
-export KONG_PROXY_LISTEN=0.0.0.0:80
-kong start
+export KONG_PROXY_LISTEN=0.0.0.0:8000
+kong start --nginx-conf /nginx.template

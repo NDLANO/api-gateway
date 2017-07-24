@@ -1,0 +1,113 @@
+pid pids/nginx.pid; # this setting is mandatory
+worker_processes ${{NGINX_WORKER_PROCESSES}}; # can be set by kong.conf
+daemon ${{NGINX_DAEMON}};                     # can be set by kong.conf
+
+error_log logs/error.log ${{LOG_LEVEL}}; # can be set by kong.conf
+env NDLA_ENVIRONMENT;
+
+events {}
+
+http {
+    proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=image_cache:10M max_size=100M inactive=40d;
+
+    # include default Kong Nginx config
+    include 'nginx-kong.conf';
+
+    server {
+        server_name *.ndla.no;
+        listen 79;
+        return 301 https://$host$request_uri;
+    }
+
+    server {
+        server_name *.ndla.no proxy.ndla-local;
+        listen 80;
+        charset UTF-8;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+        resolver 127.0.0.11;
+
+        set $api_gateway       '127.0.0.1:8000';
+
+        location ~* ^/audio/files/(.*) {
+          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT") }
+          set $s3_bucket        's3.eu-central-1.amazonaws.com/$ndla_env.audio.ndla';
+          set $url_image        '$1';
+
+          proxy_set_header       Referer    'ndla_proxy';
+          proxy_pass             https://$s3_bucket/$url_image;
+        }
+
+        location ~* ^/image-api/raw/id/(.*) {
+          proxy_set_header  Host $http_host;
+          proxy_set_header  X-Real-IP $remote_addr;
+          proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header  Forwarded "for=$remote_addr;proto=$http_x_forwarded_proto";
+          proxy_set_header  X-Forwarded-Prefix /$1;
+          proxy_pass http://$api_gateway;
+
+          proxy_cache image_cache;
+          proxy_cache_key "$proxy_host$uri$is_args$args";
+          proxy_cache_valid 30d;
+          proxy_cache_lock on;
+          proxy_cache_use_stale error invalid_header timeout updating;
+          proxy_http_version 1.1;
+          expires 30d;
+        }
+
+        location ~* ^/image-api/raw/(.*) {
+          set $image_name '$1';
+          rewrite_by_lua_block {
+            if ngx.var.args then
+              return ngx.exec("/raw-image/image-api/raw/" .. ngx.var.image_name, ngx.var.args)
+            end
+          }
+
+
+          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT") }
+          set $s3_bucket 's3.eu-central-1.amazonaws.com/$ndla_env.images.ndla';
+          set $url_image 'https://$s3_bucket/$image_name';
+
+          proxy_set_header       Referer    'ndla_proxy';
+          proxy_pass             $url_image;
+        }
+
+        location ~* ^/raw-image/(.*) {
+          internal;
+          proxy_set_header  Host $http_host;
+          proxy_set_header  X-Real-IP $remote_addr;
+          proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header  Forwarded "for=$remote_addr;proto=$http_x_forwarded_proto";
+          proxy_set_header  X-Forwarded-Prefix /$1;
+
+          proxy_pass http://$api_gateway/$1$is_args$args;
+
+          proxy_cache image_cache;
+          proxy_cache_key "$proxy_host$uri$is_args$args";
+          proxy_cache_valid 30d;
+          proxy_cache_lock on;
+          proxy_cache_use_stale error invalid_header timeout updating;
+          proxy_http_version 1.1;
+          expires 30d;
+        }
+
+        location ~* ^/files/(.*) {
+          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT") }
+          set $s3_bucket        's3.eu-central-1.amazonaws.com/$ndla_env.article-attachments.ndla';
+          set $url_file         '$1';
+
+          proxy_set_header       Referer    'ndla_proxy';
+          proxy_pass             https://$s3_bucket/$url_file;
+        }
+
+        location ~* ^/([^/]*) {
+          proxy_set_header  Host $http_host;
+          proxy_set_header  X-Real-IP $remote_addr;
+          proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header  Forwarded "for=$remote_addr;proto=$http_x_forwarded_proto";
+          proxy_set_header  X-Forwarded-Prefix /$1;
+          proxy_pass http://$api_gateway;
+        }
+    }
+}
