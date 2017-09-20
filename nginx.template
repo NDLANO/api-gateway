@@ -101,6 +101,10 @@ http {
           proxy_pass             https://$s3_bucket/$url_file;
         }
 
+        location ~* ^/robots.txt {
+            return 200 'User-agent: *\nDisallow: /\n';
+        }
+
         location ~* ^/([^/]*) {
           proxy_set_header  Host $http_host;
           proxy_set_header  X-Real-IP $remote_addr;
