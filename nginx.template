@@ -9,7 +9,7 @@ events {}
 
 http {
     proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=image_cache:10M max_size=100M inactive=40d;
-    proxy_cache_path /tmp/nginx_resp_cache levels=1:2 keys_zone=response_cache:2048M max_size=5G;
+    proxy_cache_path /tmp/nginx_resp_cache levels=1:2 keys_zone=api_response_cache:2048M max_size=5G;
 
     # include default Kong Nginx config
     include 'nginx-kong.conf';
@@ -20,10 +20,10 @@ http {
         listen 8080;
         server_name apicache;
 
-        proxy_cache_valid 200 302 301  1m;
+        proxy_cache_valid 200 302 301  5m;
         proxy_cache_valid 404         30s;
 
-        proxy_cache response_cache;
+        proxy_cache api_response_cache;
         proxy_cache_key "$proxy_host$uri$is_args$args";
         proxy_cache_lock on;
         proxy_cache_use_stale error invalid_header timeout updating;
