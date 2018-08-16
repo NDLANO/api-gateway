@@ -2,6 +2,7 @@ FROM kong:0.10.3
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
 COPY nginx.template /nginx.template
+COPY nginx-caches-prod.conf nginx-caches-default.conf /
 RUN chmod +x /ndla-run-kong.sh
 
 RUN yum --assumeyes install python-pip jq && \
