@@ -28,12 +28,20 @@ function setup_logging {
     cat <> /tmp/logpipe 1>&2 &
 }
 
+function setup_nginx_caches {
+    case $NDLA_ENVIRONMENT in
+	    prod | staging) ln -fs /nginx-caches-prod.conf /nginx-caches.conf;;
+	    *) ln -fs /nginx-caches-default.conf /nginx-caches.conf;;
+    esac
+}
+
 if [ "$NDLA_ENVIRONMENT" != "local" ]
 then
     prepare_remote
 fi
 
 setup_logging
+setup_nginx_caches
 
 export KONG_PROXY_LISTEN=0.0.0.0:8000
 kong start --nginx-conf /nginx.template

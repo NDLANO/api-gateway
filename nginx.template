@@ -8,8 +8,8 @@ env NDLA_ENVIRONMENT;
 events {}
 
 http {
-    proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=image_cache:10M max_size=2G inactive=40d;
-    proxy_cache_path /tmp/nginx_resp_cache levels=1:2 keys_zone=api_response_cache:2048M max_size=2G;
+    # include cache definitions used in the server blocks below
+    include '/nginx-caches.conf';
 
     # include default Kong Nginx config
     include 'nginx-kong.conf';
