@@ -132,7 +132,13 @@ http {
         }
 
         location ~* ^/robots.txt {
+          if ($http_host = "api.ndla.no") {
+            return 200 'User-agent: *\n';
+          }
+            
+          if ($http_host != "api.ndla.no") {
             return 200 'User-agent: *\nDisallow: /\n';
+          }
         }
 
         location ~* ^/([^/]*) {
