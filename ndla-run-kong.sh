@@ -45,4 +45,5 @@ setup_logging
 setup_nginx_caches
 
 export KONG_PROXY_LISTEN=0.0.0.0:8000
+export KONG_ADMIN_LISTEN=0.0.0.0:8001
 kong start --nginx-conf /nginx.template
