@@ -29,10 +29,11 @@ function setup_logging {
 }
 
 function setup_nginx_caches {
-    case $NDLA_ENVIRONMENT in
-	    prod | staging) ln -fs /nginx-caches-prod.conf /nginx-caches.conf;;
-	    *) ln -fs /nginx-caches-default.conf /nginx-caches.conf;;
-    esac
+    if [ $NDLA_ENVIRONMENT == "staging" ] || [ $NDLA_ENVIRONMENT == "prod" ]; then
+	    ln -fs /nginx-caches-prod.conf /nginx-caches.conf
+    else
+        ln -fs /nginx-caches-default.conf /nginx-caches.conf
+    fi
 }
 
 if [ "$NDLA_ENVIRONMENT" != "local" ]
