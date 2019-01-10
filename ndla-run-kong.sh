@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function prepare_remote {
-    export KONG_CLUSTER_ADVERTISE=$HOST_IP:7946
+    export KONG_CLUSTER_ADVERTISE=$(hostname -i):7946
 }
 
 function setup_logging {
