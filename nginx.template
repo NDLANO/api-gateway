@@ -106,7 +106,7 @@ http {
           proxy_set_header  Forwarded "for=$remote_addr;proto=$http_x_forwarded_proto";
           proxy_set_header  X-Forwarded-Prefix /$1;
 
-          proxy_pass http://$api_gateway/$1$is_args$args;
+          proxy_pass http://$api_gateway$request_uri;
 
           proxy_cache image_cache;
           proxy_cache_key "$proxy_host$uri$is_args$args";
