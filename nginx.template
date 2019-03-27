@@ -52,8 +52,15 @@ http {
         set $api_gateway       '127.0.0.1:8000';
 
         location ~* ^/audio/files/(.*) {
-          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT"):gsub("_","-") }
-          set $s3_bucket        '$ndla_env.audio.ndla.s3.amazonaws.com';
+          set_by_lua_block $s3_bucket {
+          local bucket_name = os.getenv("AUDIO_FILE_S3_BUCKET")
+            if bucket_name then
+              return bucket_name
+            else
+              return os.getenv("NDLA_ENVIRONMENT") .. ".audio.ndla.s3.amazonaws.com"
+            end
+          }
+
           set $url_image        '$1';
 
           proxy_set_header       Referer    'ndla_proxy';
@@ -90,8 +97,15 @@ http {
             end
           }
 
-          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT"):gsub("_","-") }
-          set $s3_bucket '$ndla_env.images.ndla.s3.amazonaws.com';
+          set_by_lua_block $s3_bucket {
+          local bucket_name = os.getenv("IMAGE_FILE_S3_BUCKET")
+            if bucket_name then
+              return bucket_name
+            else
+              return os.getenv("NDLA_ENVIRONMENT") .. ".images.ndla.s3.amazonaws.com"
+            end
+          }
+
           set $url_image 'https://$s3_bucket/$image_name';
 
           proxy_set_header       Referer    'ndla_proxy';
@@ -119,8 +133,15 @@ http {
         }
 
         location ~* ^/files/(.*) {
-          set_by_lua_block $ndla_env { return os.getenv("NDLA_ENVIRONMENT"):gsub("_","-") }
-          set $s3_bucket        '$ndla_env.article-attachments.ndla.s3.amazonaws.com';
+          set_by_lua_block $s3_bucket {
+            local bucket_name = os.getenv("ARTICLE_ATTACHMENT_S3_BUCKET")
+            if bucket_name then
+              return bucket_name
+            else
+              return os.getenv("NDLA_ENVIRONMENT") .. ".article-attachments.ndla.s3.amazonaws.com"
+            end
+          }
+
           set $url_file         '$1';
 
           proxy_set_header       Referer    'ndla_proxy';
