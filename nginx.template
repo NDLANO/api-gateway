@@ -4,6 +4,9 @@ daemon ${{NGINX_DAEMON}};                     # can be set by kong.conf
 
 error_log logs/error.log ${{LOG_LEVEL}}; # can be set by kong.conf
 env NDLA_ENVIRONMENT;
+env IMAGE_FILE_S3_BUCKET;
+env AUDIO_FILE_S3_BUCKET;
+env ARTICLE_ATTACHMENT_S3_BUCKET;
 
 events {}
 
@@ -55,7 +58,7 @@ http {
           set_by_lua_block $s3_bucket {
           local bucket_name = os.getenv("AUDIO_FILE_S3_BUCKET")
             if bucket_name then
-              return bucket_name
+              return bucket_name .. ".s3.amazonaws.com"
             else
               return os.getenv("NDLA_ENVIRONMENT") .. ".audio.ndla.s3.amazonaws.com"
             end
@@ -100,7 +103,7 @@ http {
           set_by_lua_block $s3_bucket {
           local bucket_name = os.getenv("IMAGE_FILE_S3_BUCKET")
             if bucket_name then
-              return bucket_name
+              return bucket_name .. ".s3.amazonaws.com"
             else
               return os.getenv("NDLA_ENVIRONMENT") .. ".images.ndla.s3.amazonaws.com"
             end
@@ -136,7 +139,7 @@ http {
           set_by_lua_block $s3_bucket {
             local bucket_name = os.getenv("ARTICLE_ATTACHMENT_S3_BUCKET")
             if bucket_name then
-              return bucket_name
+              return bucket_name .. ".s3.amazonaws.com"
             else
               return os.getenv("NDLA_ENVIRONMENT") .. ".article-attachments.ndla.s3.amazonaws.com"
             end
