@@ -109,6 +109,9 @@ http {
             end
           }
 
+          add_header "Access-Control-Allow-Origin" '*';
+          add_header "Access-Control-Allow-Methods" "GET, OPTIONS, HEAD";
+
           set $url_image 'https://$s3_bucket/$image_name';
 
           proxy_set_header       Referer    'ndla_proxy';
