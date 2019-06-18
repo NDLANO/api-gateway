@@ -1,4 +1,4 @@
-FROM kong:0.14.1-alpine
+FROM kong:1.2.0-alpine
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
 COPY nginx.template /nginx.template
