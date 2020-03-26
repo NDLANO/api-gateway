@@ -3,6 +3,7 @@ FROM kong:1.2.0-alpine
 COPY ndla-run-kong.sh /ndla-run-kong.sh
 COPY nginx.template /nginx.template
 COPY nginx-caches-prod.conf nginx-caches-default.conf /
+COPY nginx-api-cache.conf /nginx-api-cache.conf
 RUN chmod +x /ndla-run-kong.sh
 
 RUN apk update && apk add py2-pip jq && pip install awscli
