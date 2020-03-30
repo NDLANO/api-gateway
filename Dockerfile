@@ -1,4 +1,6 @@
-FROM kong:1.2.0-alpine
+FROM kong:2.0.2-alpine
+
+USER root
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
 COPY nginx.template /nginx.template
@@ -18,3 +20,4 @@ RUN mkdir -p /usr/local/kong/logs \
 
 RUN ls -lR /etc/kong
 CMD ./ndla-run-kong.sh
+

@@ -36,8 +36,8 @@ function setup_logging {
 }
 
 function setup_nginx_caches {
-    if [ $NDLA_ENVIRONMENT == "staging" ] || [ $NDLA_ENVIRONMENT == "prod" || [ $NDLA_ENVIRONMENT == "ff" ]; then
-	    ln -fs /nginx-caches-prod.conf /nginx-caches.conf
+    if [ "$NDLA_ENVIRONMENT" == "staging" ] || [ "$NDLA_ENVIRONMENT" == "prod" ] || [ "$NDLA_ENVIRONMENT" == "ff" ]; then
+	ln -fs /nginx-caches-prod.conf /nginx-caches.conf
     else
         ln -fs /nginx-caches-default.conf /nginx-caches.conf
     fi
