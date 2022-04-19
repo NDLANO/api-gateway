@@ -30,4 +30,6 @@ export KONG_CLUSTER_ADVERTISE=$(hostname -i):7946
 export KONG_PROXY_LISTEN=0.0.0.0:8000
 export KONG_ADMIN_LISTEN=0.0.0.0:8001
 
+export KONG_NGINX_HTTP_CLIENT_MAX_BODY_SIZE=2m
+
 kong start --nginx-conf /nginx.template
