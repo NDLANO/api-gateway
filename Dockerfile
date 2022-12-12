@@ -1,4 +1,4 @@
-FROM kong:2.0.2-alpine
+FROM kong:2.8.1-alpine
 USER root
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
