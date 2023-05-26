@@ -5,9 +5,7 @@ function is_kubernetes {
 }
 
 function setup_nginx_caches {
-    if [ "$NDLA_ENVIRONMENT" == "staging" ] || \
-       [ "$NDLA_ENVIRONMENT" == "prod" ] || \
-       [ "$NDLA_ENVIRONMENT" == "ff" ]
+    if [ "$NDLA_ENVIRONMENT" == "staging" ] || [ "$NDLA_ENVIRONMENT" == "prod" ]
     then
 	ln -fs /nginx-caches-prod.conf /nginx-caches.conf
     else
