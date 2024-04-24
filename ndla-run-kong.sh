@@ -27,6 +27,5 @@ setup_dns_resolver
 export KONG_CLUSTER_ADVERTISE=$(hostname -i):7946
 export KONG_PROXY_LISTEN=0.0.0.0:8000
 export KONG_ADMIN_LISTEN=0.0.0.0:8001
-export KONG_DATABASE=off
 
 kong start --nginx-conf /nginx.template
