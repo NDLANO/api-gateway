@@ -92,8 +92,8 @@ jobs:
           tar xvzf /tmp/helm.tar.gz -C /tmp/
           sudo mv /tmp/linux-amd64/helm /home/runner/bin/
           sudo chmod +x /home/runner/bin/helm
-          - name: Build kubernetes config
-          run: poetry -C $NDLA_DEPLOY run ndla env kubeconfig test
+      - name: Build kubernetes config
+        run: poetry -C $NDLA_DEPLOY run ndla env kubeconfig test
       - name: Do release
         shell: bash
         run: poetry -C $NDLA_DEPLOY run ndla release $COMPONENT --update-chart
