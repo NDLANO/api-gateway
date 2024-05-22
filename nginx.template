@@ -2,6 +2,9 @@ pid pids/nginx.pid; # this setting is mandatory
 worker_processes ${{NGINX_WORKER_PROCESSES}}; # can be set by kong.conf
 daemon ${{NGINX_DAEMON}};                     # can be set by kong.conf
 
+lmdb_environment_path dbless.lmdb;
+lmdb_map_size         128m;
+
 error_log logs/error.log ${{LOG_LEVEL}}; # can be set by kong.conf
 env NDLA_ENVIRONMENT;
 env IMAGE_FILE_S3_BUCKET;
