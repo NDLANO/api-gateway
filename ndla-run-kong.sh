@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function is_kubernetes {
     [ -e "/var/run/secrets/kubernetes.io" ]
