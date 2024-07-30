@@ -24,6 +24,10 @@ function setup_dns_resolver {
 setup_nginx_caches
 setup_dns_resolver
 
+if [ -z "$KONG_NGINX_EVENTS_WORKER_CONNECTIONS" ]; then
+    export KONG_NGINX_EVENTS_WORKER_CONNECTIONS="2048"
+fi
+
 export KONG_CLUSTER_ADVERTISE=$(hostname -i):7946
 export KONG_PROXY_LISTEN=0.0.0.0:8000
 export KONG_ADMIN_LISTEN=0.0.0.0:8001

@@ -11,7 +11,9 @@ env IMAGE_FILE_S3_BUCKET;
 env AUDIO_FILE_S3_BUCKET;
 env ARTICLE_ATTACHMENT_S3_BUCKET;
 
-events {}
+events {
+    worker_connections ${{NGINX_EVENTS_WORKER_CONNECTIONS}};
+}
 
 http {
     # include cache definitions used in the server blocks below
