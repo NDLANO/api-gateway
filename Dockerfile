@@ -9,10 +9,10 @@ RUN chmod +x /ndla-run-kong.sh
 
 RUN apt-get update && apt-get install curl -y
 
-ENV KONG_PROXY_ACCESS_LOG /dev/stdout
-ENV KONG_ADMIN_ACCESS_LOG /dev/stdout
-ENV KONG_PROXY_ERROR_LOG /dev/stderr
-ENV KONG_ADMIN_ERROR_LOG /dev/stderr
+ENV KONG_PROXY_ACCESS_LOG=/dev/stdout
+ENV KONG_ADMIN_ACCESS_LOG=/dev/stdout
+ENV KONG_PROXY_ERROR_LOG=/dev/stderr
+ENV KONG_ADMIN_ERROR_LOG=/dev/stderr
 
-CMD ./ndla-run-kong.sh
+CMD [ "./ndla-run-kong.sh" ]
 
