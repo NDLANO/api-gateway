@@ -63,7 +63,7 @@ http {
     }
 
     server {
-        server_name *.ndla.no proxy.ndla-local;
+        server_name *.ndla.no api-gateway.ndla-local;
         listen 80;
         charset UTF-8;
 
