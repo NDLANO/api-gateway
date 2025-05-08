@@ -1,4 +1,4 @@
-FROM kong:3.6.1-ubuntu
+FROM kong:3.9.0-ubuntu
 USER root
 
 COPY ndla-run-kong.sh /ndla-run-kong.sh
@@ -15,4 +15,3 @@ ENV KONG_PROXY_ERROR_LOG=/dev/stderr
 ENV KONG_ADMIN_ERROR_LOG=/dev/stderr
 
 CMD [ "./ndla-run-kong.sh" ]
-
