@@ -17,7 +17,8 @@ function setup_dns_resolver {
     if is_kubernetes; then # Check whether we are running on kubernetes or not
         echo "resolver kube-dns.kube-system.svc.cluster.local;" > /nginx-resolver.conf
     else
-        echo "resolver 127.0.0.11;" > /nginx-resolver.conf
+        RESOLVER=`grep "nameserver" /etc/resolv.conf | awk '{print $2}' | tr -d '\n'`
+        echo "resolver $RESOLVER;" > /nginx-resolver.conf
     fi
 }
 
