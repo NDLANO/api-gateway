@@ -31,6 +31,12 @@ http {
     gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml application/json;
     gzip_disable msie6;
 
+    map $arg_download $files_content_disposition {
+        default "";
+        ""      "";
+        ~.+     "attachment; filename=\"$arg_download\"";
+    }
+
     server {
         listen 8080;
         server_name apicache;
@@ -164,6 +170,8 @@ http {
               return os.getenv("NDLA_ENVIRONMENT") .. ".article-attachments.ndla.s3.amazonaws.com"
             end
           }
+
+          add_header Content-Disposition $files_content_disposition;
 
           set $url_file         '$1';
 
