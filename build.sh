@@ -10,5 +10,5 @@ then
     VERSION="SNAPSHOT"
 fi
 
-docker build -t $PROJECT:$VERSION .
+docker build -o type=docker -t $PROJECT:$VERSION .
 echo "BUILT $PROJECT:$VERSION"
