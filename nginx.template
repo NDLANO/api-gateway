@@ -181,7 +181,7 @@ http {
 
         location ~* ^/robots.txt {
           if ($http_host = "api.ndla.no") {
-            return 200 'User-agent: *\nDisallow: /*/\nAllow: /image-api/*';
+            return 200 'User-agent: *\nDisallow: /*/\nAllow: /image-api/raw/*';
           }
 
           if ($http_host != "api.ndla.no") {
